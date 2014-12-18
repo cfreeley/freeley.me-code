@@ -10,11 +10,11 @@
 angular.module('homepageApp')
   .controller('SpaceInvadersCtrl', function ($scope, pixelGenerator) {
     enchant();
-  	var canvasWidth = 480;
+  	var canvasWidth = 560;
   	var canvasHeight = 400;
-  	var moveSpeed = 10;
   	var game = new Core(canvasWidth, canvasHeight);
   	var score = 0;
+    var showStars = false; // Makes things laggy
   	game.preload('images/yeoman.png');
   	game.keybind(32, 'a'); // Making 'a' be space
 
@@ -28,14 +28,16 @@ angular.module('homepageApp')
 	    	this.x = (canvasWidth - 48) / 2;
 	    	this.y = canvasHeight - 48 - 10;
 	    	this.reload = 0;
+            this.reloadDelay = 5;
+            this.moveSpeed = 15;
 	    },
 
 	    onenterframe: function() {    
 	    	if(game.input.left && !game.input.right && this.x > 10){
-    			this.x -= moveSpeed;
+    			this.x -= this.moveSpeed;
 			}
 			else if(game.input.right && !game.input.left && this.x < canvasWidth - 58){
-			    this.x += moveSpeed;
+			    this.x += this.moveSpeed;
 			}
 
 			if (game.input.a && this.reload == 0) {
@@ -43,7 +45,7 @@ angular.module('homepageApp')
 				game.rootScene.addChild(b);
 				b.x = this.x + 24 - 12;
 				b.y = this.y;
-				this.reload = 10;
+				this.reload = this.reloadDelay;
 			}
 			else if (this.reload > 0) this.reload--;
 
@@ -62,7 +64,16 @@ angular.module('homepageApp')
 	    },
 
 	    onenterframe: function() {    
-	    	this.y += 5;
+	    	this.y += 6;
+            if (this.y >= canvasHeight - 48) {
+                var gameOver = new Label("Game Over");
+                gameOver.font = "32px cursive";
+                gameOver.color = "white";
+                gameOver.x = canvasWidth / 2 - 80;
+                gameOver.y = canvasHeight / 2 - 80;
+                game.rootScene.addChild(gameOver);
+                game.stop();
+            }
 	    }
 	});
 
@@ -92,13 +103,57 @@ angular.module('homepageApp')
 		}
 	});
 
+    var Star = Class.create(Sprite, {
+        initialize: function() {
+            Sprite.call(this, 6, 6);
+            var surface = new Surface(6, 6);
+            var sprite = pixelGenerator.generateStar();
+            surface.context.drawImage(sprite,0,0);
+            this.image = surface;
+        },
+        onenterframe: function() {
+            this.y += 2;
+            if (this.y > canvasHeight)
+                game.rootScene.removeChild(this);
+            var self = this; // inside the foreach, 'this' becomes undefined. Anyone know why?
+        }
+    });
+
+    var PauseButton = Class.create(Label, {
+        initialize: function() {
+            Label.call(this, "Pause");
+            this.font = "18px cursive";
+            this.color = "white";
+            this.paused = false;
+            this.x = canvasWidth - 70;
+            this.y = 15;
+        },
+        onclick: function() {
+            if (this.paused) {
+                game.resume();
+                this.text = "Pause";
+            }
+            else {
+                game.pause();
+                this.text = "Play";
+            }
+            this.paused = !this.paused;
+        }
+    });
+
 	var hero;
 	var aliens = [];
 	var scoreLabel = new Label("Score: 0");
+    var alienDelay = 10;
+    var alienTimer = 0;
 	scoreLabel.font = "32px cursive";
     scoreLabel.color = "white";
     scoreLabel.x = 10;
     scoreLabel.y = 5;
+    var pause = new PauseButton();
+    game.rootScene.addChild(pause);
+    pause.addEventListener('touchend', pause.onclick);
+
 	// var bullets = [];
   	game.onload = function () {
   		hero = new Player();
@@ -109,12 +164,21 @@ angular.module('homepageApp')
         //sprite.draw(game.assets['images/yeoman.png']);
   	};
   	game.onenterframe = function () {
-  		if (Math.random() > .98) {
+        if (showStars && Math.random() > .9) {
+            var star = new Star();
+            game.rootScene.addChild(star);
+            star.x = Math.random() * (canvasWidth -6);
+            star.y = -12;
+        }
+  		if (Math.random() > .95 && alienTimer <= 0) {
   			var alien = new Alien();
   			aliens.push(alien);
   			game.rootScene.addChild(alien);
-  			alien.x = Math.random() * (canvasWidth - 103);
-  		}
+  			alien.x = Math.random() * (canvasWidth - 48);
+            alienTimer = alienDelay;
+  		} 
+        else if (alienTimer > 0)
+            alienTimer--;
   		scoreLabel.text = "Score: " + score;
   	};
   	game.start();

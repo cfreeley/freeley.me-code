@@ -35,6 +35,10 @@ angular
         templateUrl: 'views/space-invaders.html',
         controller: 'SpaceInvadersCtrl'
       })
+      .when('/drag-and-drop', {
+        templateUrl: 'views/drag-and-drop.html',
+        controller: 'DragAndDropCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
