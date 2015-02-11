@@ -1,0 +1,26 @@
+[
+    {
+        "filename": "index.html",
+        "attr": {
+            "data-transition": "linear"
+        }
+    },
+    "me.md",
+    [
+        "work-experience.md",
+        "skills.md",
+        "attend.com.md",
+        "northeastern.md"
+    ],
+    [
+        "gallery.md",
+        "html5-space-invaders.html",
+        "pokemon-safari.md",
+        "bike-beacon.md"
+    ],
+    [
+        "contact.md"
+    ]   
+
+    
+]
