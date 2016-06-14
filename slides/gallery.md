@@ -1,3 +1,5 @@
 ##  Personal Gallery
   
-Move down to see demos of each
+Selected samples of personal projects
+  
+Move down to view

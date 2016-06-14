@@ -10,17 +10,24 @@
         "work-experience.md",
         "skills.md",
         "attend.com.md",
+        "attend-example.md",
+        "bike-beacon.md",
         "northeastern.md"
     ],
     [
         "gallery.md",
         "html5-space-invaders.html",
         "pokemon-safari.md",
-        "bike-beacon.md"
+        {
+            "filename": "mandel.md",
+            "attr": {
+                "data-background": "slides/images/mandel.png"
+            }
+        },
+        "st-petersburg.md",
+        "go-solution.md"
     ],
     [
         "contact.md"
-    ]   
-
-    
+    ]
 ]
