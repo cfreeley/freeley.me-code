@@ -1,6 +1,6 @@
 <a href="https://github.com/cfreeley/PokemonSafari">
-    <img src="https://pbs.twimg.com/profile_images/426158315781881856/sBsvBbjY_normal.png"
-     style="float: right" />
+    <img src="https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png"
+     style="float: right; width: 5%" />
 </a>
 <h2 style="margin-left:48px">Pokemon Safari</h2>
 <h4>chrome extension pokemon game</h4>
